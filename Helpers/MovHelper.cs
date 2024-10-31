@@ -39,7 +39,7 @@ namespace Estoque.Helpers
             if(type == "insert") { 
                 cmdSql.Append("INSERT INTO movto ");
                 cmdSql.Append("(cod_mov, cod_prod, movto_date, movto_type, qty, info) ");
-                cmdSql.Append("VALUES (@cod_mov, @cod_prod, FROM_UNIXTIME(@date), @movto_type, @qty, @info )");
+                cmdSql.Append("VALUES (@cod_mov, @cod_prod, FROM_UNIXTIME(@movto_date), @movto_type, @qty, @info )");
             }
             else
             {

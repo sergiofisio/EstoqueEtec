@@ -40,11 +40,11 @@ namespace Estoque
             TxtObs.Text = "";
         }
 
-        private void CodProdChange(object sender, MouseEventArgs e)
+        private void ShowProdName(int cod)
         {
             try
             {
-                int cod = int.Parse(TxtCodProd.Text.Trim( ));
+                
 
                 if(cod > 0)
                 {
@@ -64,6 +64,13 @@ namespace Estoque
             {
                 _messageBoxHelper.CriarMessageBox(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void CodProdChange(object sender, EventArgs e)
+        {
+            int cod = int.Parse(TxtCodProd.Text.Trim( ));
+
+            ShowProdName(cod);
         }
 
         private void BtnInclude_Click(object sender, EventArgs e)
@@ -163,6 +170,7 @@ namespace Estoque
                 {
                     _messageBoxHelper.CriarMessageBox("Nenhuma alteração detectada.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                ResetForm( );
             }
             catch(Exception ex)
             {
@@ -183,36 +191,40 @@ namespace Estoque
 
                 ValidacaoHelper.ValidarCampos(camposParaValidar);
 
+                DT = _movtoHelper.BuscarMovto(cod_mov, "dbestoque");
 
-                    DT = _movtoHelper.BuscarMovto(cod_mov, "dbestoque");
+                if(DT.Rows.Count == 0)
+                {
+                    throw new Exception("Movimentação não encontrada");
+                }
 
-                    if(DT.Rows.Count == 0)
-                    {
-                        throw new Exception("Movimentação não encontrada");
-                    }
+                
+                TxtCodProd.Text = DT.Rows[0]["cod_prod"].ToString( );
+                TxtQty.Text = DT.Rows[0]["qty"].ToString( );
+                DtpMov.Value = DateTime.Parse(DT.Rows[0]["movto_date"].ToString( ));
 
-                    TxtCodProd.Text = DT.Rows[0]["cod_prod"].ToString( );
-                    TxtQty.Text = DT.Rows[0]["qty"].ToString( );
-                    DtpMov.Value = DateTime.Parse(DT.Rows[0]["movto_date"].ToString( ));
 
-                    if(DT.Rows[0]["movto_type"].ToString( ) == "entrada")
-                    {
-                        RdbIn.Checked = true;
-                    }
-                    else
-                    {
-                        RdbOut.Checked = true;
-                    }
+                if(DT.Rows[0]["movto_type"].ToString( ) == "entrada")
+                {
+                    RdbIn.Checked = true;
+                }
+                else
+                {
+                    RdbOut.Checked = true;
+                }
 
-                    if(DT.Rows[0]["info"] != null)
-                    {
-                        TxtObs.Text = DT.Rows[0]["info"]?.ToString( ) ??"";
-                    }
+                if(DT.Rows[0]["info"] != null)
+                {
+                    TxtObs.Text = DT.Rows[0]["info"]?.ToString( ) ??"";
+                }
+
+                ShowProdName(int.Parse(DT.Rows[0]["cod_prod"].ToString( )));
 
                 pesquisa = true;
             }
             catch(Exception ex)
             {
+                ResetForm( );
                 _messageBoxHelper.CriarMessageBox(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

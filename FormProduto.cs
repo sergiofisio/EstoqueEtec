@@ -43,6 +43,7 @@ namespace Estoque
                     {
                         throw new Exception("Produto com este codigo não encontrado. Verifique as informações e tente novamente." );
                     }
+                    DtgTable.Visible=false;
                     AtualizarCamposProduto(DT.Rows[0]);
                     TxtDesc.Text = DT.Rows[0]["DESCRICAO"].ToString( );
                     decimal valor = decimal.Parse(DT.Rows[0]["VALOR"].ToString( ));
@@ -101,20 +102,18 @@ namespace Estoque
             }
         }
 
-        private void TxtCod_MouseUp(object sender, MouseEventArgs e)
+        private void ChangeNumber(object sender, MouseEventArgs e)
         {
             if(int.TryParse(TxtCod.Text, out int cod))
             {
                 HabilitarCampos(cod > 0);
             }
-        }
-
-        private void TxtCod_MouseDown(object sender, MouseEventArgs e)
-        {
-            if(int.TryParse(TxtCod.Text, out int cod))
-            {
-                HabilitarCampos(cod > 0);
-            }
+            TxtDesc.Enabled = true;
+            TxtDesc.Text = "";
+            TxtValue.Enabled = true;
+            TxtValue.Text = "";
+            DtpExp.Enabled = true;
+            DtpExp.Value = DateTime.Now;
         }
 
         private void ResetForm()

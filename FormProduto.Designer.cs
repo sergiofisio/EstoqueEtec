@@ -178,8 +178,8 @@
             TxtCod.Size = new Size(410, 33);
             TxtCod.TabIndex = 16;
             TxtCod.TextAlign = HorizontalAlignment.Right;
-            TxtCod.MouseDown += TxtCod_MouseDown;
-            TxtCod.MouseUp += TxtCod_MouseUp;
+            TxtCod.MouseDown += ChangeNumber;
+            TxtCod.MouseUp += ChangeNumber;
             // 
             // DtgTable
             // 
